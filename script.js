@@ -7,6 +7,9 @@ const btn = document.querySelector("#btn");
 const primConn = document.querySelector(".primaryBox");
 let placementMode = false;
 let countTimerr;
+let btnGhost = null;
+
+//
 
 btn.addEventListener("mouseenter", () => {
   // When the mouse hovers over the button
@@ -81,28 +84,93 @@ btn.addEventListener("keydown", (event) => {
   }
   // grrr...w. why is it left and top and not left,right,up,down. blegh
 });
-
-btn.addEventListener("dblClick", () => {
+btn.addEventListener("dblclick", () => {
   // Enter placementmode, beep boop
   console.log("You've correctly activated placementMode after a Double Click.");
   placementMode = true;
-  btn.style.boxShadow = "0 0 10px 3px #808080"; // shadow for placement
+
+  btnGhost = btn.cloneNode(true);
+  btnGhost.style.position = "absolute";
+  btnGhost.style.pointerEvents = null;
+  btnGhost.style.opacity = "0.5";
+  btnGhost.style.backgroundColor = "grey";
+  btnGhost.style.boxShadow = "0 0 15px 4xp #808080"; //shadow for placement
+  btn.style.boxShadow = "0 0 10px 3px #808080"; // shadow for button when db-clicked
   btn.style.cursor = "crosshair"; // visual target for placement
 
   //
 });
+//
+//
+// let btnDoubleClick = btn.addEventListener("dblclick");
+// function btnDoubleClickF(btnDoubleClick) {
+//   function btnDoubleClick(event) {
+//     //
+//     // Enter placementmode, beep boop
+//     console.log(
+//       "You've correctly activated placementMode after a Double Click."
+//     );
+//     placementMode = true;
+//     btn.style.boxShadow = "0 0 10px 3px #808080"; // shadow for placement
+//     btn.style.cursor = "crosshair"; // visual target for placement
+//   }
+//   btn.addEventListener("click", (event) => {
+//     //
+//     if (!placementMode) {
+//       console.log("Error, placementMode is off!");
+//       // exits the function if the placement mode is off
+//       return;
+//     }
+//     // Aquire the position of the mouse
+//     const positionM = primConn.getBoundingClientRect();
+//     const xp = event.clientX - positionM - btn.offsetWidth / 2;
+//     const yp = event.clientY - positionM - btn.offsetHeight / 2;
 
-btn.addEventListener("click", (event) => {
+//     // Update the position of the button
+//     btn.style.left = `${xp}px`;
+//     btn.style.top = `${yp}px`;
+
+//     // Exit placementmode, booooop
+//     placementMode = false;
+//     btn.style.boxShadow = ""; // remove placement shadow
+//     btn.style.cursor = "default"; // update cursor
+//     console.log("PlacementMode reset.");
+//   });
+// }
+// //
+//
+primConn.addEventListener("mousemove", (event) => {
   //
-  if (!placementMode) {
+  if (!placementMode || !btnGhost) {
+    console.log("Error, placementMode is off!");
+    // exits the function if the placement mode is off
+    return;
+  }
+  //
+  // Aquire the position of the mouse
+  const positionM = primConn.getBoundingClientRect();
+  const xp = event.clientX - positionM.left - btn.offsetWidth / 2;
+  const yp = event.clientY - positionM.top - btn.offsetHeight / 2;
+  //
+  btnGhost.style.left =
+    Math.max(0, Math.min(xp, primConn.clientWidth - btnGhost.offsetWidth)) +
+    "px";
+  btnGhost.style.top =
+    Math.max(0, Math.min(yp, primConn.clientHeight - btnGhost.offsetHeight)) +
+    "px";
+});
+
+primConn.addEventListener("click", (event) => {
+  //
+  if (!placementMode || !btnGhost) {
     console.log("Error, placementMode is off!");
     // exits the function if the placement mode is off
     return;
   }
   // Aquire the position of the mouse
   const positionM = primConn.getBoundingClientRect();
-  const xp = event.clientX - positionM - btn.offsetWidth / 2;
-  const yp = event.clientY - positionM - btn.offsetHeight / 2;
+  const xp = event.clientX - positionM.left - btn.offsetWidth / 2;
+  const yp = event.clientY - positionM.top - btn.offsetHeight / 2;
 
   // Update the position of the button
   btn.style.left = `${xp}px`;
@@ -112,4 +180,5 @@ btn.addEventListener("click", (event) => {
   placementMode = false;
   btn.style.boxShadow = ""; // remove placement shadow
   btn.style.cursor = "default"; // update cursor
+  console.log("PlacementMode reset.");
 });
