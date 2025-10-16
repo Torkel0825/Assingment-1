@@ -15,13 +15,16 @@ btn.addEventListener("mouseenter", () => {
   originalText = btn.textContent;
 
   btn.textContent = "HEY, KEEP YOUR FILTHY HAND OFF OF ME!";
+  console.log("Mouse entered button, counter reset.");
 });
 
 btn.addEventListener("mouseleave", () => {
   // When the mouse moves away from the button after hovering over it
   // Sets a timer that changes the text to "USE..", then afer 3000 miliseconds, reverts back to html code
+  console.log("Mouse left the button");
   btn.textContent = "CLICK ONCE, THEN USE ARROWKEYS!";
   countTimerr = setTimeout(() => {
+    console.log("Counter activated, 1.2s");
     btn.textContent = originalText;
   }, 1200);
 });
@@ -50,22 +53,29 @@ btn.addEventListener("mouseleave", () => {
 // });
 
 btn.addEventListener("keydown", (event) => {
-  if (placementMode) return;
+  if (placementMode) {
+    console.log("You have placementMode active, error");
+    return;
+  }
   // When the arrowkeys are pressed, the button is moved accordingly
   let key = event.key;
 
   switch (event.key) {
     case "ArrowLeft" || key === 37:
       btn.style.left = btn.offsetLeft - 10 + "px";
+      console.log("Arrowkey: Left, pressed!");
       break;
     case "ArrowUp" || key === 38:
       btn.style.top = btn.offsetTop - 10 + "px";
+      console.log("Arrowkey: Up, pressed!");
       break;
     case "ArrowRight" || key === 39:
       btn.style.left = btn.offsetLeft + 10 + "px";
+      console.log("Arrowkey: Right, pressed!");
       break;
     case "ArrowDown" || key === 40:
       btn.style.top = btn.offsetTop + 10 + "px";
+      console.log("Arrowkey: Down, pressed!");
       break;
   }
   // grrr...w. why is it left and top and not left,right,up,down. blegh
@@ -73,6 +83,7 @@ btn.addEventListener("keydown", (event) => {
 
 btn.addEventListener("dblClick", () => {
   // Enter placementmode, beep boop
+  console.log("You've correctly activated placementMode after a Double Click.");
   placementMode = true;
   btn.style.boxShadow = "0 0 10px 3px #808080"; // shadow for placement
   btn.style.cursor = "crosshair"; // visual target for placement
@@ -82,10 +93,11 @@ btn.addEventListener("dblClick", () => {
 
 btn.addEventListener("click", (event) => {
   //
-  if (!placementMode)
+  if (!placementMode) {
+    console.log("Error, placementMode is off!");
     // exits the function if the placement mode is off
     return;
-
+  }
   // Aquire the position of the mouse
   const positionM = primConn.getBoundingClientRect();
   const xp = event.clientX - positionM - btn.offsetWidth / 2;
