@@ -21,11 +21,12 @@ btn.addEventListener("mouseenter", () => {
 btn.addEventListener("mouseleave", () => {
   // When the mouse moves away from the button after hovering over it
   // Sets a timer that changes the text to "USE..", then afer 3000 miliseconds, reverts back to html code
-  console.log("Mouse left the button");
+  console.log("Mouse left the button, counter activated, 1.2s");
   btn.textContent = "CLICK ONCE, THEN USE ARROWKEYS!";
+  //   console.log();
   countTimerr = setTimeout(() => {
-    console.log("Counter activated, 1.2s");
     btn.textContent = originalText;
+    console.log("Counter off.");
   }, 1200);
 });
 
