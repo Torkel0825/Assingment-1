@@ -63,12 +63,10 @@ btn.addEventListener("keydown", (event) => {
     return;
   }
   // When the arrowkeys are pressed, the button is moved accordingly
+  //! Need to learn and then fix the timeout(), for the if status below:
   let key = event.key;
   if (event) {
     btn.textContent = "WEEEEEEEEE!!";
-    countTimer2 = setTimeout(() => {
-      btn.textContent = originalText;
-    }, 2500);
   }
   switch (event.key) {
     case "ArrowLeft" || key === 37:
@@ -90,6 +88,7 @@ btn.addEventListener("keydown", (event) => {
   }
   countTimer = null;
   countTimer2 = null;
+
   // grrr...w. why is it left and top and not left,right,up,down. blegh
 });
 btn.addEventListener("dblclick", () => {
