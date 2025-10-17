@@ -18,6 +18,7 @@ pond-water  #76bed0
   display: border-box;
   color: white;
   background-color: #808080;
+  overflow: hidden;
 
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
