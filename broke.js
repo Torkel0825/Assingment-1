@@ -5,6 +5,10 @@
 
 const btn = document.querySelector("#btn");
 const primConn = document.querySelector(".primaryBox");
+// const mouseEnter = btn.addEventListener("mouseenter");
+// const mouseMove = btn.addEventListener("mousemove");
+// const doubleClick = btn.addEventListener("dblclick");
+
 let placementMode = false;
 let countTimer;
 let btnGhost = null;
@@ -61,7 +65,7 @@ btn.addEventListener("keydown", (event) => {
     console.log("You have placementMode active, error");
     return;
   }
-  // When the arrowkeys are pressed, the button is moved accordingly
+  // When the arrowKeys are pressed, the button is moved accordingly
   let key = event.key;
 
   switch (event.key) {
@@ -84,22 +88,41 @@ btn.addEventListener("keydown", (event) => {
   }
   // grrr...w. why is it left and top and not left,right,up,down. blegh
 });
-btn.addEventListener("dblclick", () => {
+
+btn.addEventListener("dblclick", movingButton());
+
+function movingButton() {
   // Enter placementMode, beep boop
   console.log("You've correctly activated placementMode after a Double Click.");
   placementMode = true;
 
   btnGhost = btn.cloneNode(true);
   btnGhost.style.position = "absolute";
-  btnGhost.style.pointerEvents = null;
+  btnGhost.style.pointerEvents = "none";
   btnGhost.style.opacity = "0.5";
   btnGhost.style.backgroundColor = "grey";
-  btnGhost.style.boxShadow = "0 0 15px 4xp #808080"; //shadow for placement
+  btnGhost.style.boxShadow = "0 0 15px 4px #808080"; //shadow for placement
   btn.style.boxShadow = "0 0 10px 3px #808080"; // shadow for button when db-clicked
   btn.style.cursor = "crosshair"; // visual target for placement
+  document.addEventListener("mousemove", (e) => {
+    const xp = e.clientX;
+    const yp = e.clientY;
+
+    btnGhost.style.left = xp;
+    btnGhost.style.top = yp;
+  });
+  primConn.appendChild(btnGhost);
 
   //
-});
+  if (!placementMode || !btnGhost) {
+    console.log("Error, placementMode is off!");
+    // exits the function if the placement mode is off
+    return;
+  } else {
+    console.log("MouseMove initialized.");
+    primConn.addEventListener("mousemove", ghostButton());
+  }
+}
 //
 //
 // let btnDoubleClick = btn.addEventListener("dblclick");
@@ -139,44 +162,18 @@ btn.addEventListener("dblclick", () => {
 // }
 // //
 //
-
-primConn.addEventListener("mousemove", (event) => {
-  //
-  if (!placementMode || !btnGhost) {
-    console.log("Error, placementMode is off!");
-    // exits the function if the placement mode is off
-    return;
-  }
-  let ghostBtn = document.createElement("div");
-  ghostBtn.style.position = "absolute";
-  ghostBtn.style.height = "200px";
-  ghostBtn.style.width = "200px";
-
-  ghostBtn.style.pointerEvents = "none";
-  ghostBtn.style.opacity = "0.5";
-  ghostBtn.style.backgroundColor = "grey";
-  ghostBtn.style.boxShadow = "0 0 15px 4px #808080"; //shadow for placement
-  btn.style.boxShadow = "0 0 10px 3px #808080"; // shadow for button when db-clicked
-  btn.style.cursor = "crosshair"; // visual target for placement
-  //
-  primConn.appendChild(ghostBtn);
-  // Acquire the position of the mouse
+function ghostButton(event) {
   const positionM = primConn.getBoundingClientRect();
   const xp = event.clientX - positionM.left - btn.offsetWidth / 2;
   const yp = event.clientY - positionM.top - btn.offsetHeight / 2;
   //
-  while (placementMode) {
-    btnGhost.style.left = xp;
-    btnGhost.style.top = yp;
-  }
-
   btnGhost.style.left =
     Math.max(0, Math.min(xp, primConn.clientWidth - btnGhost.offsetWidth)) +
     "px";
   btnGhost.style.top =
     Math.max(0, Math.min(yp, primConn.clientHeight - btnGhost.offsetHeight)) +
     "px";
-});
+}
 
 primConn.addEventListener("click", (event) => {
   //
@@ -198,5 +195,7 @@ primConn.addEventListener("click", (event) => {
   placementMode = false;
   btn.style.boxShadow = ""; // remove placement shadow
   btn.style.cursor = "default"; // update cursor
+  btnGhost.remove();
+  btnGhost = null;
   console.log("PlacementMode reset.");
 });
