@@ -11,6 +11,9 @@ pond-water  #76bed0
   --sage: #bbc7a4;
   --emerald: #69dc9e;
   --pond: #76bed0;
+
+  --font: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans",
+    Arial, sans-serif;
 }
 
 * {
@@ -20,8 +23,7 @@ pond-water  #76bed0
   background-color: #808080;
   overflow: hidden;
 
-  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
-    "Lucida Sans", Arial, sans-serif;
+  font-family: var(--font);
 }
 
 section {

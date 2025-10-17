@@ -10,51 +10,29 @@ let countTimer;
 let countTimer2;
 let btnGhost = null;
 let mooVe = false;
+let originalText = btn.textContent;
 //
 
-btn.addEventListener("mouseenter", () => {
-  // When the mouse hovers over the button
-  // Clear any timer that has started, so it doesn't "stack" when hovering over the button multiple times
-  clearTimeout(countTimer);
-  originalText = btn.textContent;
+// btn.addEventListener("mouseenter", () => {
+//   // When the mouse hovers over the button
+//   // Clear any timer that has started, so it doesn't "stack" when hovering over the button multiple times
+//   clearTimeout(countTimer);
+//   originalText = btn.textContent;
 
-  btn.textContent = "HEY, KEEP YOUR FILTHY HAND OFF OF ME!";
-  console.log("Mouse entered button, counter reset.");
-});
-
-btn.addEventListener("mouseleave", () => {
-  // When the mouse moves away from the button after hovering over it
-  // Sets a timer that changes the text to "USE..", then after 3000 milliseconds, reverts back to html code
-  console.log("Mouse left the button, counter activated, 1.2s");
-  btn.textContent = "CLICK ONCE, THEN USE ARROWKEYS!";
-  //   console.log();
-  countTimer = setTimeout(() => {
-    btn.textContent = originalText;
-    console.log("Counter off.");
-  }, 1200);
-});
-
-// btn("onkeydown", (event) => {
-//   if (event.key === "ArrowRight") {
-//     btn.style.right = btn.offsetRight - 10 + "px";
-//   }
+//   btn.textContent = "HEY, KEEP YOUR FILTHY HAND OFF OF ME!";
+//   console.log("Mouse entered button, counter reset.");
 // });
 
-// btn.addEventListener("keydown", (event) => {
-//   switch (event.keyCode) {
-//     case 37:
-//       btn.style.left = btn.style.offsetLeft + 10 + "px";
-//       break
-//     case 38:
-//       btn.style.up = btn.style.offsetUp - 10 + "px";
-//       break
-//     case 39:
-//       btn.style.Right = btn.style.offsetRight - 10 + "px";
-//       break
-//     case 40:
-//       btn.style.Down = btn.style.offsetDown - 10 + "px";
-//       break
-//   }
+// btn.addEventListener("mouseleave", () => {
+//   // When the mouse moves away from the button after hovering over it
+//   // Sets a timer that changes the text to "USE..", then after 3000 milliseconds, reverts back to html code
+//   console.log("Mouse left the button, counter activated, 1.2s");
+//   btn.textContent = "CLICK ONCE, THEN USE ARROWKEYS!";
+//   //   console.log();
+//   countTimer = setTimeout(() => {
+//     btn.textContent = originalText;
+//     console.log("Counter off.");
+//   }, 1200);
 // });
 
 btn.addEventListener("keydown", (event) => {
@@ -62,11 +40,15 @@ btn.addEventListener("keydown", (event) => {
     console.log("You have placementMode active, error");
     return;
   }
+  // originalText = btn.textContent;
   // When the arrowkeys are pressed, the button is moved accordingly
   //! Need to learn and then fix the timeout(), for the if status below:
   let key = event.key;
   if (event) {
     btn.textContent = "WEEEEEEEEE!!";
+    countTimer = setTimeout(() => {
+      btn.textContent = originalText;
+    }, 1200);
   }
   switch (event.key) {
     case "ArrowLeft" || key === 37:
@@ -96,6 +78,7 @@ btn.addEventListener("dblclick", () => {
   console.log("You've correctly activated placementMode after a Double Click.");
   placementMode = true;
   mooVe = true;
+  btn.textContent = "HEY, KEEP YOUR FILTHY HAND OFF OF ME!";
 
   btnGhost = btn.cloneNode(true);
   btnGhost.style.position = "absolute";
@@ -108,53 +91,26 @@ btn.addEventListener("dblclick", () => {
   primConn.appendChild(btnGhost);
   //
 });
-//
-//
-// let btnDoubleClick = btn.addEventListener("dblclick");
-// function btnDoubleClickF(btnDoubleClick) {
-//   function btnDoubleClick(event) {
-//     //
-//     // Enter placementMode, beep boop
-//     console.log(
-//       "You've correctly activated placementMode after a Double Click."
-//     );
-//     placementMode = true;
-//     btn.style.boxShadow = "0 0 10px 3px #808080"; // shadow for placement
-//     btn.style.cursor = "crosshair"; // visual target for placement
-//   }
-//   btn.addEventListener("click", (event) => {
-//     //
-//     if (!placementMode) {
-//       console.log("Error, placementMode is off!");
-//       // exits the function if the placement mode is off
-//       return;
-//     }
-//     // Acquire the position of the mouse
-//     const positionM = primConn.getBoundingClientRect();
-//     const xp = event.clientX - positionM - btn.offsetWidth / 2;
-//     const yp = event.clientY - positionM - btn.offsetHeight / 2;
 
-//     // Update the position of the button
-//     btn.style.left = `${xp}px`;
-//     btn.style.top = `${yp}px`;
+// primConn.addEventListener("mousemove", (event) => {
+//   //
+btn.addEventListener("mouseenter", () => {
+  primConn.addEventListener("mousemove", handleMouseMove);
+});
+btn.addEventListener("mouseleave", () => {
+  primConn.addEventListener("mousemove", handleMouseMove);
+});
 
-//     // Exit placementMode, booooop
-//     placementMode = false;
-//     btn.style.boxShadow = ""; // remove placement shadow
-//     btn.style.cursor = "default"; // update cursor
-//     console.log("PlacementMode reset.");
-//   });
-// }
-// //
-//
-
-primConn.addEventListener("mousemove", (event) => {
-  //
+function handleMouseMove(event) {
   if (!placementMode || (!btnGhost && mooVe)) {
-    console.log("Error, placementMode is off!");
+    console.log("Error, placementMode is off! Error in 'handleMouseMode'");
     // exits the function if the placement mode is off
     return;
   }
+
+  console.log("handleMouseMove function on, counter activated, 1.2s");
+  btn.textContent = "CLICK ONCE, THEN USE ARROWKEYS!";
+  console.log();
   // Acquire the position of the mouse
   const positionM = primConn.getBoundingClientRect();
   const xp = event.clientX - positionM.left - btn.offsetWidth / 2;
@@ -172,12 +128,12 @@ primConn.addEventListener("mousemove", (event) => {
 
   btnGhost.style.left = cheese + "px";
   btnGhost.style.top = cheese2 + "px";
-});
+}
 
 primConn.addEventListener("click", (event) => {
   //
   if (!placementMode || !btnGhost) {
-    console.log("Error, placementMode is off!");
+    console.log("Error, placementMode is off! Error in 'click'");
     // exits the function if the placement mode is off
     return;
   }
@@ -196,4 +152,5 @@ primConn.addEventListener("click", (event) => {
   btn.style.boxShadow = ""; // remove placement shadow
   btn.style.cursor = "default"; // update cursor
   console.log("PlacementMode reset.");
+  btn.textContent = originalText;
 });
